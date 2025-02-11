@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dreamlayer.api.dto.CommonResponse;
 import com.dreamlayer.api.service.InventoryService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +36,6 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 import java.util.List;
 
-import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,22 +45,22 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(INVENTORY)
-@Api(value = INVENTORY)
+@Tag(name = INVENTORY, description = "Inventory details display")
 public class InventoryController {
 
 	private final InventoryService inventoryService;
 	
-	@ReadOperation
+	@Operation(summary = "Check the Stock details")
+	@ApiResponses({
+		@ApiResponse(responseCode = HTTP_200_CODE, description = HTTP_200_MESSAGE, content = { @Content(schema = @Schema(implementation = CommonResponse.class), mediaType=APPLICATION_JSON_VALUE) }),
+		@ApiResponse(responseCode = HTTP_400_CODE, description = HTTP_400_MESSAGE),
+		@ApiResponse(responseCode = HTTP_401_CODE, description = HTTP_401_MESSAGE),
+		@ApiResponse(responseCode = HTTP_403_CODE, description = HTTP_403_MESSAGE),
+		@ApiResponse(responseCode = HTTP_404_CODE, description = HTTP_404_MESSAGE),
+		@ApiResponse(responseCode = HTTP_429_CODE, description = HTTP_429_MESSAGE),
+		@ApiResponse(responseCode = HTTP_500_CODE, description = HTTP_500_MESSAGE)
+	})
 	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "isInStock")
-	@ApiResponses(value = {
-			@ApiResponse(code = HTTP_200_CODE, message = HTTP_200_MESSAGE, response = CommonResponse.class),
-			@ApiResponse(code = HTTP_400_CODE, message = HTTP_400_MESSAGE),
-			@ApiResponse(code = HTTP_401_CODE, message = HTTP_401_MESSAGE),
-			@ApiResponse(code = HTTP_403_CODE, message = HTTP_403_MESSAGE),
-			@ApiResponse(code = HTTP_404_CODE, message = HTTP_404_MESSAGE),
-			@ApiResponse(code = HTTP_429_CODE, message = HTTP_429_MESSAGE),
-			@ApiResponse(code = HTTP_500_CODE, message = HTTP_500_MESSAGE) })
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<CommonResponse> isInStock(@RequestParam List<String> skuCode) {
 		
