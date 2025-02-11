@@ -10,13 +10,19 @@ eureka:
 
 # Application Details
 spring:
+  # Swagger 2 Config
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
   application:
     name: inventory-service
+  # DataBase Config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/inventory-service
     username: root
     password: admin
+  # JPA Hibernate Config
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -33,3 +39,15 @@ management:
     web:
       exposure:
         include: prometheus
+
+# Swagger
+springdoc:
+  api-docs:
+    enabled: true
+    path: /inventory/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /inventory/swagger-ui.html
+
+
+  
