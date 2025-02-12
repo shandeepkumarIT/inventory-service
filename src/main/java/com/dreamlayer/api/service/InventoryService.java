@@ -35,7 +35,8 @@ public class InventoryService {
 		CommonResponse commonResponse = new CommonResponse();
 		commonResponse.setStatus("Success");
 		commonResponse.setStatus_code(00);
-		commonResponse.setStatus_description("Successfully received InStock value");
+		commonResponse.setTitle("Inventory Details");
+		commonResponse.setMessage("Successfully received InStock value");
 		commonResponse.setResponse(result);
 		return commonResponse;	
 	}
