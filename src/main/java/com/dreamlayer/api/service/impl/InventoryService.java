@@ -1,30 +1,28 @@
-package com.dreamlayer.api.service;
+package com.dreamlayer.api.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dreamlayer.api.dto.CommonResponse;
 import com.dreamlayer.api.dto.InventoryResponse;
-import com.dreamlayer.api.repository.InventoryRepository;
+import com.dreamlayer.api.manage.IInventoryManage;
+import com.dreamlayer.api.service.IInventoryService;
 
-import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
-public class InventoryService {
+public class InventoryService implements IInventoryService {
 
-	private final InventoryRepository inventoryRepository;
+	@Autowired
+	private IInventoryManage iInventoryManage;
 	
-	@SneakyThrows
-	@Transactional(readOnly = true)
+	@Override
 	public CommonResponse isInStock(List<String> skuCode) {
 		
-		List<InventoryResponse> result = inventoryRepository.findBySkuCodeIn(skuCode).stream()
+		List<InventoryResponse> result = iInventoryManage.isInStock(skuCode).stream()
 														.map(inventory -> 
 															InventoryResponse.builder()
 																.skuCode(inventory.getSkuCode())
